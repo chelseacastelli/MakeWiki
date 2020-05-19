@@ -10,7 +10,8 @@
       <a href="{% url 'wiki-list-page' %}">Back to List</a>
 
       {% if request.user.is_authenticated %}
-        <h3 style="margin-top: 21px">Edit your wiki</h3>
+        <h4 style="margin-top: 21px">Edit your wiki</h4>
+
         <form method="POST">
             {{ form.as_p }}
             {% csrf_token %}

@@ -6,8 +6,8 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.utils.text import slugify
 
-from wiki.forms import PageForm
 from wiki.models import Page
+from wiki.forms import PageForm
 
 
 class PageCreateView(CreateView):
@@ -37,19 +37,20 @@ class PageDetailView(DetailView):
         """ Returns a specific wiki page by slug. """
         page = self.get_queryset().get(slug__iexact=slug)
         return render(request, 'page.html', {
-          'page': page
+            'page': page,
+            'form': PageForm()
         })
 
     def post(self, req, slug):
         '''Edit the page's information'''
-        form = PageForm(req.POST)  # create a form
+        form = PageForm(req.POST)           # create a form
 
         page = self.get_queryset().get(slug__iexact=slug)
-        page.title = req.POST['title']  # retrieve the page's title
+        page.title = req.POST['title']      # retrieve the page's title
         page.content = req.POST['content']  # retrieve the page's content
-        page.author = req.user  # get the author of the user
-        page.slug = slugify(page.title)  # create a new slug to match title
-        page.save()  # saves our new post
+        page.author = req.user              # get the author of the user
+        page.slug = slugify(page.title)     # create a new slug to match title
+        page.save()                         # saves our new post
 
         # We load the wiki details page and the url will be the title's slug
         return HttpResponseRedirect(reverse('wiki-details-page', args=[page.slug]))
